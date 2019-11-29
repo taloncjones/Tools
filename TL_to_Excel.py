@@ -1,21 +1,43 @@
 import xml.etree.ElementTree as ET
-import xlwt
+import xlsxwriter
 
-def write_row(sheet, row, data):
-    r = sheet.row(row)
-    for index, col in enumerate(data):
-        r.write(index, col)
-    return row + 1
+def create_doc():
+    book = xlsxwriter.Workbook('test.xls')
+    sheet1 = book.add_worksheet('PySheet1')
+    header_format = book.add_format({
+        'align': 'left',
+        'valign': 'vcenter',
+        'bold': True,
+        'font_size': 14
+    })
+    feature_format = book.add_format({
+        'align': 'left',
+        'valign': 'vcenter',
+        'text_wrap': True
+    })
+    impact_format = book.add_format({
+        'align': 'center',
+        'valign': 'vcenter',
+    })
+    testcase_format = book.add_format({
+        'align': 'left',
+        'text_wrap': True
+    })
+    sheet1.set_column('A:A', 20, feature_format)
+    sheet1.set_column('B:B', 10, impact_format)
+    sheet1.set_column('C:C', 75, testcase_format)
+    sheet1.set_column('D:D', 15)
+    cols = ['Feature', 'Impact', 'Test Case', 'Testing']
+    sheet1.write_row('A1', cols, header_format)
+    return (book, sheet1)
 
 tree = ET.parse('testsuites_all.xml')
 root = tree.getroot()
 
 impact_level = ['Smoke', 'Low', 'Med', 'High']
 
-book = xlwt.Workbook()
-sheet1 = book.add_sheet('PySheet1')
-cols = ['Feature', 'Impact Level', 'Test Case']
-row = write_row(sheet1, 0, cols)
+book, sheet = create_doc()
+row = 1
 
 print(root.get('name'))
 
@@ -28,11 +50,13 @@ for feature in root.findall('./*[@name]'):
         for testcase in feature.findall(f".//*[@name='AAs']/*[@name='{impact}']/testcase"):
             test_name = testcase.get('name')
             print(test_name)
-            row = write_row(sheet1, row, [feature_name, impact, test_name])
+            sheet.write_row(row, 0, (feature_name, impact, test_name))
+            row += 1
         # Same as above but checks for AA folder (numerous features seem to have this typo)
         for testcase in feature.findall(f".//*[@name='AA']/*[@name='{impact}']/testcase"):
             test_name = testcase.get('name')
             print(test_name)
-            row = write_row(sheet1, row, [feature_name, impact, test_name])
+            sheet.write_row(row, 0, (feature_name, impact, test_name))
+            row += 1
 
-book.save('test.xls')
+book.close()
