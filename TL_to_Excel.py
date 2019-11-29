@@ -39,12 +39,12 @@ impact_level = ['Smoke', 'Low', 'Med', 'High']
 book, sheet = create_doc()
 row = 1
 
-print(root.get('name'))
-
 for feature in root.findall('./*[@name]'):
     feature_name = feature.get('name')
+    feature_row_start = row
     print(f'--------------------- {feature_name} ---------------------')
     for impact in impact_level:
+        impact_row_start = row
         print(f'--> {impact} <--')
         # Find all testcases in <Feature>/AAs/<impact>/ folders
         for testcase in feature.findall(f".//*[@name='AAs']/*[@name='{impact}']/testcase"):
@@ -58,5 +58,7 @@ for feature in root.findall('./*[@name]'):
             print(test_name)
             sheet.write_row(row, 0, (feature_name, impact, test_name))
             row += 1
+        if impact_row_start != row: sheet.merge_range(impact_row_start, 1, row-1, 1, impact)
+    if feature_row_start != row: sheet.merge_range(feature_row_start, 0, row-1, 0, feature_name)
 
 book.close()
