@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 import xlsxwriter
 
 def create_doc():
-    book = xlsxwriter.Workbook('test.xls')
+    book = xlsxwriter.Workbook('test.xlsx')
     sheet1 = book.add_worksheet('PySheet1')
     header_format = book.add_format({
         'align': 'left',
