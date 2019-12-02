@@ -24,7 +24,7 @@ def create_doc():
         'align': 'left',
         'text_wrap': True
     })
-    sheet1.set_column('A:A', 20, feature_format)
+    sheet1.set_column('A:A', 30, feature_format)
     sheet1.set_column('B:B', 12.5, impact_format)
     sheet1.set_column('C:C', 75, testcase_format)
     sheet1.set_column('D:D', 15)
