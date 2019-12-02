@@ -2,9 +2,9 @@ import xml.etree.ElementTree as ET
 import xlsxwriter
 
 
-def create_doc():
-    book = xlsxwriter.Workbook('test.xlsx')
-    sheet1 = book.add_worksheet('PySheet1')
+def create_doc(book_name, sheet_name):
+    book = xlsxwriter.Workbook(book_name)
+    sheet1 = book.add_worksheet(sheet_name)
     header_format = book.add_format({
         'align': 'left',
         'valign': 'vcenter',
@@ -36,7 +36,9 @@ root = tree.getroot()
 
 impact_level = ['Smoke', 'Low', 'Med', 'High']
 
-book, sheet = create_doc()
+book_name = input("Enter name for .xlsx doc (NOTE: Existing items will be overwritten): ")
+sheet_name = input("Enter name for worksheet in document: ")
+book, sheet = create_doc(book_name, sheet_name)
 row = 1
 
 for feature in root.findall('./*[@name]'):
