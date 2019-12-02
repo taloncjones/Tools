@@ -31,13 +31,20 @@ def create_doc(book_name, sheet_name):
     return (book, sheet1)
 
 
+def name_to_xlsx(book_name):
+    if book_name.endswith('.xlsx'):
+        return book_name
+    else:
+        return book_name + '.xlsx'
+
+
 tree = ET.parse('testsuites_all.xml')
 root = tree.getroot()
 
 impact_level = ['Smoke', 'Low', 'Med', 'High']
 
-book_name = input("Enter name for .xlsx doc (NOTE: Existing items will be overwritten): ")
-sheet_name = input("Enter name for worksheet in document: ")
+book_name = name_to_xlsx(input('Enter name for .xlsx doc (NOTE: Existing items will be overwritten): '))
+sheet_name = input('Enter name for worksheet in document: ')
 book, sheet = create_doc(book_name, sheet_name)
 row = 1
 
