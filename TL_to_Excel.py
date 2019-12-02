@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 import xlsxwriter
 
+
 def create_doc():
     book = xlsxwriter.Workbook('test.xlsx')
     sheet1 = book.add_worksheet('PySheet1')
@@ -24,12 +25,11 @@ def create_doc():
         'text_wrap': True
     })
     sheet1.set_column('A:A', 20, feature_format)
-    sheet1.set_column('B:B', 10, impact_format)
+    sheet1.set_column('B:B', 12.5, impact_format)
     sheet1.set_column('C:C', 75, testcase_format)
     sheet1.set_column('D:D', 15)
-    cols = ['Feature', 'Impact', 'Test Case', 'Testing']
-    sheet1.write_row('A1', cols, header_format)
     return (book, sheet1)
+
 
 tree = ET.parse('testsuites_all.xml')
 root = tree.getroot()
@@ -58,7 +58,12 @@ for feature in root.findall('./*[@name]'):
             print(test_name)
             sheet.write_row(row, 0, (feature_name, impact, test_name))
             row += 1
-        if impact_row_start != row: sheet.merge_range(impact_row_start, 1, row-1, 1, impact)
-    if feature_row_start != row: sheet.merge_range(feature_row_start, 0, row-1, 0, feature_name)
+        if row == impact_row_start:
+            sheet.write_row(row, 0, (feature_name, impact))
+            row += 1
 
+cols = [{'header': 'Feature'}, {'header': 'Impact'}, {'header': 'Test Case'}, {'header': 'Testing'}]
+sheet.add_table(0, 0, row-1, 3, {'first_column': True,
+                                 'style': 'Table Style Light 1',
+                                 'columns': cols})
 book.close()
