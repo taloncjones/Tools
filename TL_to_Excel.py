@@ -43,7 +43,8 @@ root = tree.getroot()
 
 impact_level = ['Smoke', 'Low', 'Med', 'High']
 
-book_name = name_to_xlsx(input('Enter name for .xlsx doc (NOTE: Existing items will be overwritten): '))
+book_name = name_to_xlsx(
+    input('Enter name for .xlsx doc (NOTE: Existing items will be overwritten): '))
 sheet_name = input('Enter name for worksheet in document: ')
 book, sheet = create_doc(book_name, sheet_name)
 row = 1
@@ -71,7 +72,10 @@ for feature in root.findall('./*[@name]'):
             sheet.write_row(row, 0, (feature_name, impact))
             row += 1
 
-cols = [{'header': 'Feature'}, {'header': 'Impact'}, {'header': 'Test Case'}, {'header': 'Testing'}]
+cols = [{'header': 'Feature'},
+        {'header': 'Impact'},
+        {'header': 'Test Case'},
+        {'header': 'Testing'}]
 sheet.add_table(0, 0, row-1, 3, {'first_column': True,
                                  'style': 'Table Style Light 1',
                                  'columns': cols})
