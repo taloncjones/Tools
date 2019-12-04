@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 
 # Checks github.com/mozilla/geckodriver/releases for latest geckodriver release for current OS, downloads, and extracts
-def get_gecko_driver():
+def get_geckodriver():
     my_os = sys.platform
     github_url = 'https://github.com'
     gecko_url = 'https://github.com/mozilla/geckodriver/releases'
@@ -45,6 +45,6 @@ def get_gecko_driver():
     return
 
 if __name__ == '__main__':
-    get_gecko_driver()
+    get_geckodriver()
     print(f'Program finished. Geckodriver can be found in current directory as an .exe')
     exit(0)
